@@ -1,3 +1,4 @@
+import { endOfWeek, isAfter, isBefore, startOfWeek } from 'date-fns';
 import { SchedueleInfo, YrgoLesson, YrgoSchedule } from './interfaces';
 import { convertNamedDay, getScheduleAsArray, stripLastDigits } from './utils';
 const ical = require('node-ical');
@@ -58,4 +59,35 @@ export async function getYrgoSchedule(
     const { start, end, summary }: SchedueleInfo = lesson as SchedueleInfo;
     return getLesson({ start, end, summary });
   });
+}
+
+// Used for printing the scheduele in Ascending Order
+export async function printSchedule(schedule: Promise<YrgoSchedule>) {
+  (await schedule).sort((a, b) => (a.date > b.date ? 1 : -1));
+  (await schedule).forEach((lesson) =>
+    console.log(JSON.stringify(lesson, null, 2))
+  );
+}
+
+export async function getLessonsInWeek(
+  scheduele: Promise<YrgoSchedule>
+): Promise<YrgoSchedule> {
+  const today = new Date();
+  const startDateOfWeek = startOfWeek(today, { weekStartsOn: 1 });
+  const endDateOfWeek = endOfWeek(today, { weekStartsOn: 1 });
+  const lessons: YrgoSchedule = [];
+
+  (await scheduele).forEach((lesson) => {
+    const {
+      unformatedTimes: [unformatedTimesArray],
+    } = lesson;
+    const dateOfLesson = unformatedTimesArray['start'];
+    if (
+      isBefore(dateOfLesson, endDateOfWeek) &&
+      isAfter(dateOfLesson, startDateOfWeek)
+    ) {
+      lessons.push(lesson);
+    }
+  });
+  return lessons;
 }

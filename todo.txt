@@ -1,0 +1,1 @@
+// Uppdatera interface så att jag kan destrukturera ut {start, end} ifrån unformatedTimes arrayen.
