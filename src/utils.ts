@@ -1,4 +1,6 @@
-const moment = require('moment');
+// const moment = require('moment');
+const moment = require('moment-timezone');
+import { startOfWeek, endOfWeek } from 'date-fns';
 
 export function convertNamedDay(day: string): string {
   switch (day) {
@@ -27,6 +29,20 @@ export function stripLastDigits(time: string): string {
 }
 
 export function getScheduleAsArray(time: object): Array<string> {
-  const scheduele = moment.tz(time, 'Europe/Stockholm').toString();
-  return scheduele.split(' ');
+  const schedule = moment.tz(time, 'Europe/Stockholm').toString();
+  return schedule.split(' ');
+}
+
+export function getScheduleAsArrayFromString(time: string): Array<string> {
+  const schedule = moment
+    .tz(time, 'Europe/Stockholm')
+    .format('YYYY-MM-DD-HH:mm')
+    .toString();
+  console.log(schedule);
+
+  return schedule.split(' ');
+}
+
+export function getLessonsOfWeek(unmodifiedDate: string) {
+  const start = startOfWeek(new Date(unmodifiedDate), { weekStartsOn: 1 });
 }

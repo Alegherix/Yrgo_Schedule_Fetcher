@@ -8,6 +8,7 @@
     "fs": "^0.0.1-security",
     "googleapis": "39",
     "moment": "^2.29.1",
+    "moment-timezone": "^0.5.31",
     "node-fetch": "^2.6.1",
     "node-ical": "^0.12.1",
     "zlib": "^1.0.5"

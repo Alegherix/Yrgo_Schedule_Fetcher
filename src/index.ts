@@ -1,63 +1,54 @@
-import { SchedueleInfo, YrgoLesson, YrgoSchedule } from './interfaces';
-import { convertNamedDay, getScheduleAsArray, stripLastDigits } from './utils';
-const ical = require('node-ical');
+import { endOfWeek, format, startOfWeek } from 'date-fns';
+import { YrgoSchedule } from './interfaces';
+import { getScheduleAsArray, getScheduleAsArrayFromString } from './utils';
+// import { getLessonsOfWeek } from './utils';
+import { getYrgoSchedule } from './YrgoSchedule';
+const moment = require('moment');
 
-// Converts starting time to JSON with multiple entries of scheduele
-function convertStartingInfo(start: object) {
-  const [dayName, month, date, year, time] = getScheduleAsArray(start);
-  const convertedDayName = convertNamedDay(dayName);
-  const convertedTime = stripLastDigits(time);
+const mySchedule = getYrgoSchedule();
 
-  return { day: convertedDayName, year, month, date, startTime: convertedTime };
+export function getLessonsOfWeek(unmodifiedDate: string) {
+  const start = startOfWeek(new Date(unmodifiedDate), { weekStartsOn: 1 });
+  console.log(start);
 }
 
-// Convert and returns ending time of a lesson to JSON
-function convertEndingInfo(end: object) {
-  // 4th value is the actual time
-  const endTime = stripLastDigits(getScheduleAsArray(end)[4]);
+mySchedule.then((lesson) => {
+  const testObject = lesson[0];
+  console.log(JSON.stringify(testObject));
+  // const {
+  //   unformatedTimes: [unformatedObject],
+  // } = testObject;
+  // const {start} = unformatedObject;
+  // console.log(unformatedObject);
 
-  return { endTime };
-}
+  // console.log(start);
+  // console.log(end);
 
-// Converts and returns summary as info and teacher as JSON
-function convertSummaryInfo(summary: string) {
-  let [lesson, teacher] = summary.split('(');
-
-  if (!teacher) {
-    return { teacher: '', lesson };
-  }
-  //Replaces trailing ) from teacher
-  teacher = teacher.substr(0, teacher.length - 1);
-  return { teacher, lesson };
-}
-
-function getLesson(start: object, end: object, summary: string): YrgoLesson {
-  const startObj = convertStartingInfo(start);
-  const endingObj = convertEndingInfo(end);
-  const summaryObj = convertSummaryInfo(summary);
-
-  return {
-    ...startObj,
-    ...endingObj,
-    ...summaryObj,
-  };
-}
-
-// Returns entire YRGO schedule as JSON with WU20 set as Default.
-async function getYrgoSchedule(
-  scheduleID: string = '7hg90k4hmcqveiatt6sgu5ji1c@group.calendar.google.com'
-): Promise<YrgoSchedule> {
-  const scheduleURL = `https://calendar.google.com/calendar/ical/${scheduleID}/public/basic.ics`;
-  const res = await ical.async.fromURL(scheduleURL);
-
-  return {
-    schedule: Object.values(res).map((lesson) => {
-      const { start, end, summary }: SchedueleInfo = lesson as SchedueleInfo;
-      return getLesson(start, end, summary);
-    }),
-  };
-}
-
-getYrgoSchedule().then((schedule) => {
-  Object.values(schedule).forEach((k) => console.log(k));
+  // const [start, end] = lesson[0]['unformatedTimes'];
 });
+
+// const testString = '2021-05-12T07:00:00.000Z';
+
+// const myDate = format(new Date(), "'Today is a' iiii");
+// const today = new Date();
+// const startDateOfWeek = startOfWeek(today);
+// const endDateOfWeek = endOfWeek(today);
+
+// console.log(today);
+// console.log(startDateOfWeek);
+// console.log(endDateOfWeek);
+
+//
+// function getLessonsInWeek(
+//   scheduele: Promise<YrgoSchedule>
+// ): Promise<YrgoSchedule> {
+//   const today = new Date();
+//   const startDateOfWeek = startOfWeek(today, { weekStartsOn: 1 });
+//   const endDateOfWeek = endOfWeek(today, { weekStartsOn: 1 });
+
+//   scheduele.then((lesson) => {});
+// }
+
+// getScheduleAsArrayFromString(testString);
+
+// const scheduele = moment.tz(testString, 'Europe/Stockholm').toString();
