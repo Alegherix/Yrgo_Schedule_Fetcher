@@ -1,4 +1,4 @@
-import format from 'date-fns/format';
+import { format } from 'date-fns';
 import { sv } from 'date-fns/locale';
 
 // export function convertNamedDay(day: string): string {
@@ -40,4 +40,8 @@ export function getScheduleAsAnArray(time: object): Array<string> {
 
 export function capitalizeFirstLetter(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+export function concatDate(startTime: string, ...args: Array<string>) {
+  return args.join('-').concat(startTime);
 }

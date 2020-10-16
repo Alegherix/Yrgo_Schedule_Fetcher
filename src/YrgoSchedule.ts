@@ -3,11 +3,19 @@ import {
   endOfWeek,
   isAfter,
   isBefore,
+  parse,
   startOfMonth,
+  startOfTomorrow,
   startOfWeek,
 } from 'date-fns';
+import { sv } from 'date-fns/locale';
 import { SchedueleInfo, YrgoLesson, YrgoSchedule } from './interfaces';
-import { capitalizeFirstLetter, getScheduleAsAnArray } from './utils';
+import {
+  capitalizeFirstLetter,
+  concatDate,
+  getScheduleAsAnArray,
+} from './utils';
+
 const ical = require('node-ical');
 
 // Converts starting time to JSON with multiple entries of scheduele
@@ -50,13 +58,11 @@ function getLesson(scheduleInfo: SchedueleInfo): YrgoLesson {
   const startObj = convertStartingInfo(start);
   const endingObj = convertEndingInfo(end);
   const summaryObj = convertSummaryInfo(summary);
-  const unformatedTimes = { unformatedTimes: [{ start, end }] };
 
   return {
     ...startObj,
     ...endingObj,
     ...summaryObj,
-    ...unformatedTimes,
   };
 }
 
@@ -79,6 +85,14 @@ export async function printSchedule(schedule: Promise<YrgoSchedule>) {
   (await schedule).forEach((lesson) =>
     console.log(JSON.stringify(lesson, null, 2))
   );
+}
+
+export async function getLessonToday(
+  scheduele: Promise<YrgoSchedule>
+): Promise<YrgoSchedule> {
+  const today = new Date();
+  const tomorrow = startOfTomorrow();
+  return getLessonInX(scheduele, today, tomorrow);
 }
 
 export async function getLessonsThisWeek(
@@ -123,10 +137,11 @@ export async function getLessonInX(
   const lessons: YrgoSchedule = [];
 
   (await scheduele).forEach((lesson) => {
-    const {
-      unformatedTimes: [unformatedTimesArray],
-    } = lesson;
-    const dateOfLesson = unformatedTimesArray['start'];
+    const { year, month, date, startTime } = lesson;
+    const dateString = concatDate(startTime, year, month, date, '');
+    const dateOfLesson = parse(dateString, 'yyyy-MMMM-dd-HH:mm', new Date(), {
+      locale: sv,
+    });
     if (isBefore(dateOfLesson, endDate) && isAfter(dateOfLesson, startDate)) {
       lessons.push(lesson);
     }
