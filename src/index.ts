@@ -1,17 +1,6 @@
-import { SchedueleInfo, YrgoLesson } from './interfaces';
+import { SchedueleInfo, YrgoLesson, YrgoSchedule } from './interfaces';
 import { convertNamedDay, getScheduleAsArray, stripLastDigits } from './utils';
 const ical = require('node-ical');
-const fs = require('fs');
-
-// Används för att wgeta uppdaterade versioner
-const fileUrl =
-  'https://calendar.google.com/calendar/ical/7hg90k4hmcqveiatt6sgu5ji1c@group.calendar.google.com/public/basic.ics';
-
-// use the sync function parseFile() to parse this ics file
-const events = ical.sync.parseFile('./assets/basic.ics');
-
-const firstEvent: any = Object.values(events)[0];
-const { start, end, summary }: SchedueleInfo = firstEvent;
 
 // Converts starting time to JSON with multiple entries of scheduele
 function convertStartingInfo(start: object) {
@@ -33,23 +22,42 @@ function convertEndingInfo(end: object) {
 // Converts and returns summary as info and teacher as JSON
 function convertSummaryInfo(summary: string) {
   let [lesson, teacher] = summary.split('(');
-  teacher = teacher.substr(0, teacher.length - 1);
 
+  if (!teacher) {
+    return { teacher: '', lesson };
+  }
+  //Replaces trailing ) from teacher
+  teacher = teacher.substr(0, teacher.length - 1);
   return { teacher, lesson };
 }
 
-function getSchedule(start: object, end: object, summary: string): YrgoLesson {
+function getLesson(start: object, end: object, summary: string): YrgoLesson {
   const startObj = convertStartingInfo(start);
   const endingObj = convertEndingInfo(end);
   const summaryObj = convertSummaryInfo(summary);
 
-  const returnObj = {
+  return {
     ...startObj,
     ...endingObj,
     ...summaryObj,
   };
-
-  return returnObj;
 }
 
-console.log(JSON.stringify(getSchedule(start, end, summary)));
+// Returns entire YRGO schedule as JSON with WU20 set as Default.
+async function getYrgoSchedule(
+  scheduleID: string = '7hg90k4hmcqveiatt6sgu5ji1c@group.calendar.google.com'
+): Promise<YrgoSchedule> {
+  const scheduleURL = `https://calendar.google.com/calendar/ical/${scheduleID}/public/basic.ics`;
+  const res = await ical.async.fromURL(scheduleURL);
+
+  return {
+    schedule: Object.values(res).map((lesson) => {
+      const { start, end, summary }: SchedueleInfo = lesson as SchedueleInfo;
+      return getLesson(start, end, summary);
+    }),
+  };
+}
+
+getYrgoSchedule().then((schedule) => {
+  Object.values(schedule).forEach((k) => console.log(k));
+});

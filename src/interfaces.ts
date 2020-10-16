@@ -5,19 +5,7 @@ export interface SchedueleInfo {
 }
 
 export interface YrgoSchedule {
-  lesson: [
-    {
-      day: string;
-      year: string;
-      month: string;
-      date: string;
-      startTime: string;
-
-      endTime: string;
-      teacher: string;
-      lesson: string;
-    }
-  ];
+  schedule: Array<YrgoLesson>;
 }
 
 export interface YrgoLesson {
