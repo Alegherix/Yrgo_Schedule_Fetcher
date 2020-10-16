@@ -16,8 +16,6 @@ export interface YrgoLesson {
   teacher: string;
   lesson: string;
   unformatedTimes: Array<Object>;
-  // unformatedTimes: UnformatedTimes;
-  // unformatedTimes: UnformatedTimes;
 }
 
 export interface UnformatedTimes {

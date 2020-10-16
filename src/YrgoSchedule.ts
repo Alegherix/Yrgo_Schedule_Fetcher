@@ -7,23 +7,28 @@ import {
   startOfWeek,
 } from 'date-fns';
 import { SchedueleInfo, YrgoLesson, YrgoSchedule } from './interfaces';
-import { convertNamedDay, getScheduleAsArray, stripLastDigits } from './utils';
+import { capitalizeFirstLetter, getScheduleAsAnArray } from './utils';
 const ical = require('node-ical');
 
 // Converts starting time to JSON with multiple entries of scheduele
 function convertStartingInfo(start: object) {
-  const [dayName, month, date, year, time] = getScheduleAsArray(start);
-  const convertedDayName = convertNamedDay(dayName);
-  const convertedTime = stripLastDigits(time);
+  const [year, month, date, dayName, time] = getScheduleAsAnArray(start);
+  const convertedDayName = capitalizeFirstLetter(dayName);
+  const convertedMonthName = capitalizeFirstLetter(month);
 
-  return { day: convertedDayName, year, month, date, startTime: convertedTime };
+  return {
+    day: convertedDayName,
+    date,
+    month: convertedMonthName,
+    year,
+    startTime: time,
+  };
 }
 
 // Convert and returns ending time of a lesson to JSON
 function convertEndingInfo(end: object) {
   // 4th value is the actual time
-  const endTime = stripLastDigits(getScheduleAsArray(end)[4]);
-
+  const endTime = getScheduleAsAnArray(end)[4];
   return { endTime };
 }
 
@@ -76,7 +81,7 @@ export async function printSchedule(schedule: Promise<YrgoSchedule>) {
   );
 }
 
-export async function getLessonsInWeek(
+export async function getLessonsThisWeek(
   scheduele: Promise<YrgoSchedule>
 ): Promise<YrgoSchedule> {
   const today = new Date();
@@ -85,7 +90,7 @@ export async function getLessonsInWeek(
   return getLessonInX(scheduele, startDateOfWeek, endDateOfWeek);
 }
 
-export async function getLessonsInMonth(
+export async function getLessonsThisMonth(
   scheduele: Promise<YrgoSchedule>
 ): Promise<YrgoSchedule> {
   const today = new Date();
@@ -115,7 +120,6 @@ export async function getLessonInX(
   startDate: Date,
   endDate: Date
 ): Promise<YrgoSchedule> {
-  const today = new Date();
   const lessons: YrgoSchedule = [];
 
   (await scheduele).forEach((lesson) => {
