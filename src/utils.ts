@@ -33,16 +33,6 @@ export function getScheduleAsArray(time: object): Array<string> {
   return schedule.split(' ');
 }
 
-export function getScheduleAsArrayFromString(time: string): Array<string> {
-  const schedule = moment
-    .tz(time, 'Europe/Stockholm')
-    .format('YYYY-MM-DD-HH:mm')
-    .toString();
-  console.log(schedule);
-
-  return schedule.split(' ');
-}
-
 export function getLessonsOfWeek(unmodifiedDate: string) {
   const start = startOfWeek(new Date(unmodifiedDate), { weekStartsOn: 1 });
 }

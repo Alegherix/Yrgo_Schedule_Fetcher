@@ -1,4 +1,11 @@
-import { endOfWeek, isAfter, isBefore, startOfWeek } from 'date-fns';
+import {
+  endOfMonth,
+  endOfWeek,
+  isAfter,
+  isBefore,
+  startOfMonth,
+  startOfWeek,
+} from 'date-fns';
 import { SchedueleInfo, YrgoLesson, YrgoSchedule } from './interfaces';
 import { convertNamedDay, getScheduleAsArray, stripLastDigits } from './utils';
 const ical = require('node-ical');
@@ -75,6 +82,40 @@ export async function getLessonsInWeek(
   const today = new Date();
   const startDateOfWeek = startOfWeek(today, { weekStartsOn: 1 });
   const endDateOfWeek = endOfWeek(today, { weekStartsOn: 1 });
+  return getLessonInX(scheduele, startDateOfWeek, endDateOfWeek);
+}
+
+export async function getLessonsInMonth(
+  scheduele: Promise<YrgoSchedule>
+): Promise<YrgoSchedule> {
+  const today = new Date();
+  const startDateOfMonth = startOfMonth(today);
+  const endDateOfMonth = endOfMonth(today);
+  return getLessonInX(scheduele, startDateOfMonth, endDateOfMonth);
+}
+
+export async function getRemainingLessonsInWeek(
+  scheduele: Promise<YrgoSchedule>
+): Promise<YrgoSchedule> {
+  const today = new Date();
+  const endDateOfWeek = endOfWeek(today);
+  return getLessonInX(scheduele, today, endDateOfWeek);
+}
+
+export async function getRemainingLessonsInMonth(
+  scheduele: Promise<YrgoSchedule>
+): Promise<YrgoSchedule> {
+  const today = new Date();
+  const endDateOfMonth = endOfMonth(today);
+  return getLessonInX(scheduele, today, endDateOfMonth);
+}
+
+export async function getLessonInX(
+  scheduele: Promise<YrgoSchedule>,
+  startDate: Date,
+  endDate: Date
+): Promise<YrgoSchedule> {
+  const today = new Date();
   const lessons: YrgoSchedule = [];
 
   (await scheduele).forEach((lesson) => {
@@ -82,10 +123,7 @@ export async function getLessonsInWeek(
       unformatedTimes: [unformatedTimesArray],
     } = lesson;
     const dateOfLesson = unformatedTimesArray['start'];
-    if (
-      isBefore(dateOfLesson, endDateOfWeek) &&
-      isAfter(dateOfLesson, startDateOfWeek)
-    ) {
+    if (isBefore(dateOfLesson, endDate) && isAfter(dateOfLesson, startDate)) {
       lessons.push(lesson);
     }
   });
