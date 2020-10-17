@@ -4,7 +4,7 @@
     "module": "commonjs",
     "lib": ["dom", "es6", "es2017", "esnext.asynciterable"],
     "sourceMap": true,
-    "outDir": "lib",
+    "outDir": "dist",
     "moduleResolution": "node",
     "declaration": true,
     "declarationMap": true,
@@ -29,6 +29,5 @@
     "rootDir": "src",
     
   },
-  "exclude": ["node_modules"],
   "include": ["src"],
 }

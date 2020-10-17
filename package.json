@@ -1,9 +1,10 @@
 {
-  "name": "yrgo-schedule-fetcher-teeeest",
+  "name": "yrgo-schedule-fetcher-teeeeesting",
   "version": "1.0.0",
-  "main": "lib/YrgoSchedule.js",
-  "types": "lib",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "license": "MIT",
+  "author": "Martin Hansson",
   "dependencies": {
     "date-fns": "^2.16.1",
     "node-ical": "^0.12.1"
@@ -14,7 +15,7 @@
     "typescript": "^4.0.3"
   },
   "scripts": {
-    "build": "tsc -p .",
+    "build": "tsc",
     "dev": "ts-node-dev --no-notify --respawn src/index.ts",
     "test": "echo \"No test specified\""
   }

@@ -7,7 +7,9 @@ Bör även även gå att parsea andra klassers schema som använder sig av RFC55
 
 ## Installation
 
-```js
+Försöker fixa atm....
+
+<!-- ```js
 npm install YrgoSchedueleFetcher
 ```
 
@@ -15,7 +17,7 @@ alternativt,
 
 ```js
 yarn add YrgoSchedueleFetcher
-```
+``` -->
 
 ### API
 
