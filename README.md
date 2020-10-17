@@ -7,9 +7,7 @@ Bör även även gå att parsea andra klassers schema som använder sig av RFC55
 
 ## Installation
 
-Försöker fixa atm....
-
-<!-- ```js
+```js
 npm install YrgoSchedueleFetcher
 ```
 
@@ -17,7 +15,7 @@ alternativt,
 
 ```js
 yarn add YrgoSchedueleFetcher
-``` -->
+```
 
 ### API
 
@@ -48,15 +46,13 @@ YrgoSchedule är inget mer än en Array av JSON objekt, exempel:
 
 ### ExempelAnvändning:
 
-Hämta alla lektioner denna månaden som görs av Vincent och skriv ut det.
-
 ```js
-import {
-  filterBy,
-  getLessonsThisMonth,
+const {
   getYrgoSchedule,
+  getLessonsThisWeek,
+  filterBy,
   printSchedule,
-} from './YrgoSchedule';
+} = require('yrgo-schedule-fetcher');
 
 async function main() {
   // Hämtar WU20 Schemat by default
@@ -65,7 +61,7 @@ async function main() {
   // Hämtar lektioner för månaden
   const monthlySchedule = getLessonsThisMonth(mySchedule);
 
-  // Filtrera ut alla som inte har Vincent som lärare
+  // Filtrera ut alla lektioner som har Vincent som lärare
   const vincentLessons = filterBy(
     monthlySchedule,
     'teacher',
@@ -100,6 +96,7 @@ getLessonInX(scheduele: Promise<YrgoSchedule>, startDate: Date, endDate: Date) -
 
 filterBy(scheduele: Promise<YrgoSchedule>, property: string, value: string) -> Returnerar ett Promise<YrgoSchedule> baserat på property, samt värdet man vill filtrera med.
 
+printSchedule(schedule: Promise<YrgoSchedule>) -> Printar ut Schemat i terminalen.
 ```
 
 ### Andra Klassers Scheman

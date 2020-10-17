@@ -85,7 +85,9 @@ export async function getYrgoSchedule(
 }
 
 // Used for printing the scheduele in Ascending Order
-export async function printSchedule(schedule: Promise<YrgoSchedule>) {
+export async function printSchedule(
+  schedule: Promise<YrgoSchedule>
+): Promise<void> {
   (await schedule).sort((a, b) => (a.date > b.date ? 1 : -1));
   (await schedule).forEach((lesson) =>
     console.log(JSON.stringify(lesson, null, 2))
