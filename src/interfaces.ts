@@ -4,8 +4,6 @@ export interface SchedueleInfo {
   summary: string;
 }
 
-export type YrgoSchedule = YrgoLesson[];
-
 export interface YrgoLesson {
   day: string;
   year: string;
@@ -15,9 +13,8 @@ export interface YrgoLesson {
   endTime: string;
   teacher: string;
   lesson: string;
-  // unformatedTimes: Array<Object>;
 }
 
-export interface UnformatedTimes {
-  unformatedTimes: Object;
-}
+export type YrgoSchedule = YrgoLesson[];
+
+export type YrgoLessonProperty = keyof YrgoLesson;

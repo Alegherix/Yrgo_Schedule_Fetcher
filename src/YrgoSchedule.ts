@@ -9,7 +9,12 @@ import {
   startOfWeek,
 } from 'date-fns';
 import { sv } from 'date-fns/locale';
-import { SchedueleInfo, YrgoLesson, YrgoSchedule } from './interfaces';
+import {
+  SchedueleInfo,
+  YrgoLesson,
+  YrgoLessonProperty,
+  YrgoSchedule,
+} from './interfaces';
 import {
   capitalizeFirstLetter,
   concatDate,
@@ -87,7 +92,7 @@ export async function printSchedule(schedule: Promise<YrgoSchedule>) {
   );
 }
 
-export async function getLessonToday(
+export async function getLessonsToday(
   scheduele: Promise<YrgoSchedule>
 ): Promise<YrgoSchedule> {
   const today = new Date();
@@ -147,4 +152,13 @@ export async function getLessonInX(
     }
   });
   return lessons;
+}
+
+export async function filterBy(
+  scheduele: Promise<YrgoSchedule>,
+  property: YrgoLessonProperty,
+  value: string
+): Promise<YrgoSchedule> {
+  const mySchedule = await scheduele;
+  return mySchedule.filter((scheduele) => scheduele[property] === value);
 }

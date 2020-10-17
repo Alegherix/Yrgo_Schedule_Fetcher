@@ -1,1 +1,1 @@
-// Uppdatera interface så att jag kan destrukturera ut {start, end} ifrån unformatedTimes arrayen.
+// Fixa todo och Documentationen
