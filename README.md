@@ -40,7 +40,7 @@ YrgoSchedule är inget mer än en Array av JSON objekt, exempel:
   "startTime": "09:00",
   "endTime": "12:00",
   "teacher": "Vincent Klaiber",
-  "subj": "PHP",
+  "subject": "PHP",
   "course": "Programmering"
 }
 ```

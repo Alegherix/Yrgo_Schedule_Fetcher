@@ -48,15 +48,15 @@ function convertEndingInfo(end: object) {
 // Converts and returns summary as info and teacher as JSON
 function convertSummaryInfo(summary: string) {
   let [lesson, teacher] = summary.split('(');
-  const [subj, course] = lesson.split('/').map((s) => s.trim());
+  const [subject, course] = lesson.split('/').map((s) => s.trim());
 
   if (!teacher) {
-    return { teacher, subj, course };
+    return { teacher, subject, course };
   }
   //Replaces trailing ) from teacher
   teacher = teacher.substr(0, teacher.length - 1);
 
-  return { teacher, subj, course };
+  return { teacher, subject, course };
 }
 
 function getLesson(scheduleInfo: SchedueleInfo): YrgoLesson {
