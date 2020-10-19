@@ -33,14 +33,15 @@ YrgoSchedule är inget mer än en Array av JSON objekt, exempel:
 
 ```js
 {
-  "day": "Torsdag",
-  "date": "15",
-  "month": "Oktober",
+  "day": "Onsdag",
+  "date": "30",
+  "month": "September",
   "year": "2020",
-  "startTime": "13:00",
-  "endTime": "16:00",
+  "startTime": "09:00",
+  "endTime": "12:00",
   "teacher": "Vincent Klaiber",
-  "lesson": "SQL / Datakällor "
+  "subj": "PHP",
+  "course": "Programmering"
 }
 ```
 
