@@ -11,8 +11,9 @@ export interface YrgoLesson {
   date: string;
   startTime: string;
   endTime: string;
-  teacher: string;
-  lesson: string;
+  teacher?: string;
+  subject?: string;
+  course?: string;
 }
 
 export type YrgoSchedule = YrgoLesson[];
