@@ -1,6 +1,6 @@
 <img src="https://media.giphy.com/media/7yTqXVALy7Fwk/giphy.gif" width="100%">
 
-# Scheduele Parser for YRGO
+# Scheduele Parser for Yrgo
 
 Används för att parsea Schemat för WU20 och göra det till ett mer lättarbetat JSON format.
 Bör även även gå att parsea andra klassers schema som använder sig av RFC5545 formatet.
